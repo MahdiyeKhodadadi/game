@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>کلید مرحله‌ی بعدی</title>
+<style>
+  body {
+    font-family: "Vazirmatn", sans-serif;
+    background: linear-gradient(135deg, #f3e7e9, #e3eeff);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    color: #333;
+  }
+  h1 { color: #5c4aff; margin-bottom: 20px; }
+  input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid #888;
+    border-radius: 10px;
+    width: 80%;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  button {
+    background-color: #5c4aff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  button:hover { background-color: #4533d3; }
+  p { font-size: 1.1rem; margin-top: 15px; }
+</style>
+</head>
+<body>
+
+<h1>کلید مرحله‌ی بعدی:</h1>
+<p id="question">طعم این چیپسی که خوردی چی بود؟</p>
+<input type="text" id="answer" placeholder="پاسخ خود را بنویسید">
+<button onclick="checkAnswer()">ارسال</button>
+<p id="feedback"></p>
+
+<script>
+let stage = 1; // مرحله ۱ یا ۲
+let attempts = 0; // شمارنده‌ی اشتباهات
+let errorCycle = 0; // برای نوبتی کردن پیام‌های خطا بعد از مرحله ۷
+
+function checkAnswer() {
+  const input = document.getElementById('answer');
+  const feedback = document.getElementById('feedback');
+  let answer = input.value.trim();
+
+  const correct1 = "پنیر فرانسوی";
+  const correct2 = "کشو";
+
+  // پاسخ درست برای مرحله‌ی فعلی
+  if ((stage === 1 && answer === correct1) || (stage === 2 && answer === correct2)) {
+    attempts = 0;
+    if (stage === 1) {
+      stage = 2;
+      feedback.innerHTML = "🎊آفرین درست گفتی🎊<br>راهنمایی مرحله بعدی:<br>وقتی میخوای بری بیرون منو می‌کِشی بیرون. من چی هستم؟";
+      input.value = "";
+      input.placeholder = "پاسخ مرحله دوم را بنویسید";
+    } else {
+      feedback.innerHTML = "✅ Yes, go ahead ✅";
+      input.style.display = "none";
+      document.querySelector("button").style.display = "none";
+    }
+  } 
+  else {
+    attempts++;
+    let msg = "";
+    if (attempts === 1) msg = "بیشتر سعی کنید.";
+    else if (attempts === 2) msg = "بیشتررر";
+    else if (attempts === 3) msg = "بیشتررر ترر";
+    else if (attempts === 4) msg = "تررر ترر";
+    else if (attempts === 5) msg = "تر زدیی";
+    else if (attempts === 6) msg = "Error ۷۰۴";
+    else {
+      msg = (errorCycle % 2 === 0) ? "تر زدیی" : "Error ۷۰۴";
+      errorCycle++;
+    }
+    feedback.textContent = msg;
+  }
+}
+</script>
+
+</body>
+</html>
